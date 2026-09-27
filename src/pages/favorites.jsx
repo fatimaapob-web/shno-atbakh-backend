@@ -1,8 +1,8 @@
 import { useState } from "react"
 
-import Navbar from "../components/Navbar/Navbar"
-import Footer from "../components/Footer/Footer"
-import RecipeCard from "../components/RecipeCard/RecipeCard"
+import Navbar from "../components/Navbar.jsx"
+import Footer from "../components/Footer/Footer.jsx"
+import RecipeCard from "../components/RecipeCard/RecipeCard.jsx"
 import mockRecipes from "../data/mockRecipes"
 
 function Favorites() {
@@ -26,21 +26,17 @@ function Favorites() {
   const favorites = recipes.filter((recipe) => recipe.favorite)
 
   return (
-    <div>
+    <div className="page-shell">
       <Navbar />
 
       <main className="py-16 min-h-[70vh]">
 
         <div className="container">
 
-          <div className="mb-12">
-            <span className="text-[#FF7043] font-semibold">
-              ❤️ Saved Recipes
-            </span>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-[#263238] mt-2">
-              My Favorites
-            </h1>
+          <div className="reveal-item page-heading page-heading-left">
+            <span className="section-eyebrow">THE ONES YOU LOVED</span>
+            <h1>Your little <em>recipe box.</em></h1>
+            <p>Keep the good ones close. Dinner inspiration, saved for later.</p>
           </div>
 
           {favorites.length > 0 ? (
@@ -56,16 +52,16 @@ function Favorites() {
 
             </div>
           ) : (
-            <div className="text-center py-20">
-              <div className="text-7xl mb-5">
+            <div className="empty-state">
+              <div className="empty-state-icon">
                 🤍
               </div>
 
-              <h2 className="text-2xl font-bold mb-3">
+              <h2>
                 No favorites yet
               </h2>
 
-              <p className="text-[#757575]">
+              <p>
                 Save recipes you love and find them here.
               </p>
             </div>

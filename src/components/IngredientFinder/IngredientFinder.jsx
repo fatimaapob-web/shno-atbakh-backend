@@ -1,8 +1,10 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import IngredientChip from "../IngredientChip/IngredientChip"
 import Button from "../Button/Button"
 
 function IngredientFinder() {
+  const navigate = useNavigate()
   const [input, setInput] = useState("")
   const [ingredients, setIngredients] = useState([])
 
@@ -97,6 +99,9 @@ function IngredientFinder() {
           )}
 
           <button
+            type="button"
+            onClick={() => navigate("/ai-results", { state: { ingredients } })}
+            disabled={ingredients.length === 0}
             className="w-full mt-8 bg-[#FF7043] hover:opacity-90 text-white py-4 rounded-2xl font-semibold transition"
           >
             🤖 Find Recipes With AI
@@ -111,4 +116,3 @@ function IngredientFinder() {
 }
 
 export default IngredientFinder
-import { useNavigate } from "react-router-dom"

@@ -1,60 +1,64 @@
-import heroImage from "../../assets/hero.png"
+import { Link } from "react-router-dom"
+
+const heroImage =
+  "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1400&q=90"
 
 function Hero() {
   return (
-    <section className="min-h-[650px] bg-[#FFFDF7] flex items-center overflow-hidden">
-      <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-16">
-
-        {/* النص */}
-        <div className="slide-left">
-          <span className="inline-block bg-[#E8F5E9] text-[#2E7D32] px-5 py-2 rounded-full text-sm font-semibold mb-6">
-            ✨ AI-Powered Recipes
+    <section className="hero-section">
+      <div className="container hero-layout">
+        <div className="hero-copy reveal-item">
+          <span className="hero-kicker">
+            <span className="hero-kicker-dot" />
+            GOOD FOOD STARTS HERE
           </span>
-
-          <h1 className="text-4xl md:text-6xl font-bold text-[#263238] leading-tight mb-6">
-            What's in your fridge?
+          <h1>
+            A little hungry?
             <br />
-            <span className="text-[#4CAF50]">
-              Let's make something delicious!
-            </span>
+            <span>Let’s fix that.</span>
           </h1>
-
-          <p className="text-lg text-[#757575] leading-8 max-w-xl mb-8">
-            Tell us what ingredients you have in your fridge,
-            and let our AI find delicious meals you can make.
+          <p>
+            Tell us what’s in your kitchen. We’ll help turn it into something
+            delicious, comforting, and worth coming back for.
           </p>
-
-          <button
-            className="
-              bg-[#4CAF50]
-              hover:bg-[#2E7D32]
-              text-white
-              px-8
-              py-4
-              rounded-2xl
-              font-semibold
-              text-lg
-              transition-all
-              duration-300
-              hover:scale-105
-              shadow-lg
-            "
-          >
-            Find My Recipe →
-          </button>
-        </div>
-
-        {/* الصورة */}
-        <div className="slide-right flex justify-center">
-          <div className="float w-full max-w-lg">
-            <img
-              src={heroImage}
-              alt="Healthy food recipes"
-              className="w-full h-auto object-contain"
-            />
+          <div className="hero-actions">
+            <a className="button button-sun" href="#popular-recipes">
+              Find tonight’s dinner <span aria-hidden="true">↗</span>
+            </a>
+            <Link className="hero-secondary-link" to="/weekly">
+              Plan my week <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <div className="hero-social-proof">
+            <span className="proof-avatars" aria-hidden="true">
+              <span>🍅</span><span>🌿</span><span>🍋</span>
+            </span>
+            <span><strong>Fresh ideas,</strong> made for real kitchens</span>
           </div>
         </div>
 
+        <div className="hero-photo-wrap reveal-item">
+          <img
+            className="hero-photo"
+            src={heroImage}
+            alt="Freshly made pasta with herbs, ready to enjoy"
+          />
+          <div className="hero-photo-shade" />
+          <div className="hero-photo-caption">
+            <span className="caption-label">TONIGHT’S LITTLE JOY</span>
+            <strong>Fresh pasta, big comfort.</strong>
+            <span>Simple ingredients · 25 minutes</span>
+          </div>
+          <div className="hero-sticker" aria-label="Made with love">
+            <span>♡</span>
+            MADE WITH<br />A LITTLE LOVE
+          </div>
+        </div>
+      </div>
+      <div className="hero-bottom-note">
+        <span>GOOD FOOD, NO FUSS</span>
+        <span className="note-line" />
+        <span>SCROLL FOR A LITTLE INSPIRATION ↓</span>
       </div>
     </section>
   )

@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom"
 
-import Navbar from "../components/Navbar/Navbar"
-import Footer from "../components/Footer/Footer"
-import RecipeCard from "../components/RecipeCard/RecipeCard"
-import mockRecipes from "../data/mockRecipes"
+import Navbar from "../../components/Navbar.jsx"
+import Footer from "../../components/Footer/Footer.jsx"
+import RecipeCard from "../../components/RecipeCard/RecipeCard.jsx"
+import mockRecipes from "../../data/mockRecipes"
 
 function AIResults() {
   const location = useLocation()
@@ -20,7 +20,7 @@ function AIResults() {
   )
 
   return (
-    <div>
+    <div className="page-shell">
 
       <Navbar />
 
@@ -35,22 +35,17 @@ function AIResults() {
             ← Back
           </button>
 
-          <div className="text-center mb-12">
-
-            <span className="text-[#4CAF50] font-semibold">
-              🤖 AI Results
-            </span>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-[#263238] mt-2 mb-5">
-              Recipes For Your Ingredients
-            </h1>
+          <div className="reveal-item page-heading">
+            <span className="section-eyebrow">A LITTLE FRIDGE MAGIC</span>
+            <h1>Let’s cook <em>something lovely.</em></h1>
+            <p>Here are a few delicious ways to use what you already have.</p>
 
             <div className="flex flex-wrap justify-center gap-2">
 
               {ingredients.map((ingredient) => (
                 <span
                   key={ingredient}
-                  className="bg-[#E8F5E9] text-[#2E7D32] px-4 py-2 rounded-full"
+                  className="ingredient-result-chip"
                 >
                   {ingredient}
                 </span>
@@ -72,7 +67,7 @@ function AIResults() {
 
             </div>
           ) : (
-            <div className="text-center py-20">
+            <div className="empty-state">
 
               <div className="text-6xl mb-5">
                 🍳

@@ -13,23 +13,24 @@ function Navbar() {
   ]
 
   return (
-    <nav className="bg-white border-b border-[#E0E0E0] sticky top-0 z-50">
-      <div className="container h-20 flex items-center justify-between">
-        <NavLink to="/" className="text-2xl font-bold text-[#2E7D32]">
-          🍃 FoodAI
+    <nav className="site-nav sticky top-0 z-50">
+      <div className="container nav-inner">
+        <NavLink to="/" className="brand-mark">
+          <span className="brand-icon" aria-hidden="true">✳</span>
+          <span>good<span className="brand-highlight">food</span><small>RECIPES FOR REAL LIFE</small></span>
         </NavLink>
 
-        <div className="hidden md:flex items-center gap-7">
+        <div className="desktop-nav">
           {links.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                font-medium transition ${
+                `nav-link ${isActive ? "active" : ""} ${
                   isActive
-                    ? "text-[#4CAF50]"
-                    : "text-[#263238] hover:text-[#4CAF50]"
-                }
+                    ? "is-current"
+                    : ""
+                }`
               }
             >
               {link.name}
@@ -38,22 +39,25 @@ function Navbar() {
         </div>
 
         <button
+          type="button"
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-2xl"
+          className="mobile-menu-button"
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
         >
-          ☰
+          {menuOpen ? "×" : "☰"}
         </button>
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-[#E0E0E0] px-6 py-4">
-          <div className="flex flex-col gap-4">
+        <div className="mobile-nav">
+          <div className="container mobile-nav-links">
             {links.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 onClick={() => setMenuOpen(false)}
-                className="py-2 text-[#263238]"
+                className="mobile-nav-link"
               >
                 {link.name}
               </NavLink>

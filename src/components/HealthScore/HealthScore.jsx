@@ -14,7 +14,7 @@ function HealthScore({ score }) {
       <div className="w-full h-3 bg-[#E8F5E9] rounded-full overflow-hidden">
         <div
           className="h-full bg-[#4CAF50] rounded-full transition-all duration-700"
-          style={{ width: ${score}% }}
+          style={{ width: `${score}%` }}
         />
       </div>
     </div>

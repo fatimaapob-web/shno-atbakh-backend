@@ -2,7 +2,7 @@ const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 
 export async function getRecipes() {
-  const response = await fetch(${API_BASE_URL}/recipes)
+  const response = await fetch(`${API_BASE_URL}/recipes`)
 
   if (!response.ok) {
     throw new Error("Failed to fetch recipes")
@@ -12,7 +12,7 @@ export async function getRecipes() {
 }
 
 export async function getWeeklyMeals() {
-  const response = await fetch(${API_BASE_URL}/weekly-meals)
+  const response = await fetch(`${API_BASE_URL}/weekly-meals`)
 
   if (!response.ok) {
     throw new Error("Failed to fetch weekly meals")
@@ -22,7 +22,7 @@ export async function getWeeklyMeals() {
 }
 
 export async function searchRecipes(ingredients) {
-  const response = await fetch(${API_BASE_URL}/recipes/search, {
+  const response = await fetch(`${API_BASE_URL}/recipes/search`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export async function searchRecipes(ingredients) {
 }
 
 export async function getFavorites() {
-  const response = await fetch(${API_BASE_URL}/favorites)
+  const response = await fetch(`${API_BASE_URL}/favorites`)
 
   if (!response.ok) {
     throw new Error("Failed to fetch favorites")
@@ -50,7 +50,7 @@ export async function getFavorites() {
 }
 
 export async function addFavorite(recipeId) {
-  const response = await fetch(${API_BASE_URL}/favorites, {
+  const response = await fetch(`${API_BASE_URL}/favorites`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export async function addFavorite(recipeId) {
 }
 
 export async function removeFavorite(recipeId) {
-  const response = await fetch(${API_BASE_URL}/favorites/${recipeId}, {
+  const response = await fetch(`${API_BASE_URL}/favorites/${recipeId}`, {
     method: "DELETE",
   })
 

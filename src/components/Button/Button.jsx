@@ -22,9 +22,9 @@ function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={${baseClasses} ${variantClasses[variant]} ${
+      className={`${baseClasses} ${variantClasses[variant]} ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
-      }}
+      }`}
     >
       {children}
     </button>

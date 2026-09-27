@@ -1,7 +1,7 @@
 import { useState } from "react"
-import Navbar from "../components/Navbar/Navbar"
-import Footer from "../components/Footer/Footer"
-import RecipeCard from "../components/RecipeCard/RecipeCard"
+import Navbar from "../components/Navbar.jsx"
+import Footer from "../components/Footer/Footer.jsx"
+import RecipeCard from "../components/RecipeCard/RecipeCard.jsx"
 import mockRecipes from "../data/mockRecipes"
 
 function WeeklyMeals() {
@@ -28,25 +28,17 @@ function WeeklyMeals() {
   ]
 
   return (
-    <div>
+    <div className="page-shell">
       <Navbar />
 
       <main className="py-16">
 
         <div className="container">
 
-          <div className="text-center mb-14">
-            <span className="text-[#4CAF50] font-semibold">
-              Your Plan
-            </span>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-[#263238] mt-2 mb-4">
-              Weekly Meals
-            </h1>
-
-            <p className="text-[#757575]">
-              Plan delicious meals for your entire week.
-            </p>
+          <div className="page-heading">
+            <span className="section-eyebrow">A LITTLE PLAN, A LOT LESS “WHAT’S FOR DINNER?”</span>
+            <h1>Your week, <em>well fed.</em></h1>
+            <p>Seven comforting ideas to make the everyday table feel special.</p>
           </div>
 
           <div className="space-y-14">
@@ -55,11 +47,12 @@ function WeeklyMeals() {
               const recipe = recipes[index % recipes.length]
 
               return (
-                <section key={day}>
-
-                  <h2 className="text-2xl font-bold text-[#263238] mb-6">
-                    {day}
-                  </h2>
+                <section className="reveal-item meal-day" key={day}>
+                  <div className="meal-day-heading">
+                    <span className="meal-day-number">{String(index + 1).padStart(2, "0")}</span>
+                    <h2>{day}</h2>
+                    <span className="meal-day-label">{index === 0 ? "LET’S START THE WEEK" : "ON THE MENU"}</span>
+                  </div>
 
                   <div className="max-w-sm">
                     <RecipeCard

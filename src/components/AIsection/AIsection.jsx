@@ -1,29 +1,33 @@
+import { useState } from "react"
+import IngredientFinder from "../IngredientFinder/IngredientFinder.jsx"
+
 function AISection() {
+  const [finderOpen, setFinderOpen] = useState(false)
+
   return (
-    <section className="py-20 bg-[#E8F5E9]">
+    <section className="pantry-section">
       <div className="container">
-
-        <div className="max-w-4xl mx-auto text-center">
-
-          <div className="ai-glow inline-flex items-center justify-center w-20 h-20 bg-white rounded-full text-4xl shadow-md mb-6">
-            🤖
+        <div className="pantry-card">
+          <div className="pantry-copy">
+            <span className="section-eyebrow">THE CLEVER LITTLE SOUS-CHEF</span>
+            <h2>Good things are already in your fridge.</h2>
+            <p>Tell us what you have. We’ll find the delicious part.</p>
+            <button
+              type="button"
+              className="button button-sun"
+              onClick={() => setFinderOpen((open) => !open)}
+              aria-expanded={finderOpen}
+            >
+              {finderOpen ? "Close the pantry" : "Cook with what you have"}
+              <span aria-hidden="true">↗</span>
+            </button>
           </div>
-
-          <h2 className="text-3xl md:text-5xl font-bold text-[#263238] mb-5">
-            Let AI Cook With What You Have
-          </h2>
-
-          <p className="text-[#757575] text-lg leading-8 max-w-2xl mx-auto mb-8">
-            Add the ingredients available in your fridge and our AI
-            will suggest recipes that match them.
-          </p>
-
-          <button className="bg-[#FF7043] hover:opacity-90 text-white px-8 py-4 rounded-2xl font-semibold transition hover:scale-105">
-            Try AI Recipe Finder
-          </button>
-
+          <div className="pantry-art" aria-hidden="true">
+            <span>🍅</span><span>🥑</span><span>🍋</span><span>🌿</span>
+            <strong>use what<br />you love</strong>
+          </div>
         </div>
-
+        {finderOpen && <div className="pantry-finder"><IngredientFinder /></div>}
       </div>
     </section>
   )

@@ -3,7 +3,7 @@ const API_BASE_URL =
 
 async function aiRequest(endpoint, data) {
   const response = await fetch(
-    ${API_BASE_URL}${endpoint},
+    `${API_BASE_URL}${endpoint}`,
     {
       method: "POST",
 

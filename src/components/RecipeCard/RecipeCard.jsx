@@ -1,46 +1,38 @@
 function RecipeCard({ recipe, onFavorite }) {
   return (
-    <article className="card-hover bg-white rounded-3xl overflow-hidden border border-[#E0E0E0] shadow-sm">
-
-      <div className="image-zoom h-52 bg-[#E8F5E9]">
+    <article className="recipe-card card-hover">
+      <div className="recipe-image image-zoom">
         <img
           src={recipe.image}
           alt={recipe.name}
-          className="w-full h-full object-cover"
+          loading="lazy"
         />
+        <span className="recipe-cuisine">{recipe.cuisine}</span>
+        <button
+          type="button"
+          onClick={() => onFavorite?.(recipe)}
+          className="recipe-favorite"
+          aria-label={recipe.favorite ? "Remove from favorites" : "Add to favorites"}
+          aria-pressed={Boolean(recipe.favorite)}
+        >
+          {recipe.favorite ? "♥" : "♡"}
+        </button>
       </div>
 
-      <div className="p-5">
-
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold bg-[#E8F5E9] text-[#2E7D32] px-3 py-1 rounded-full">
-            {recipe.cuisine}
-          </span>
-
-          <button
-            onClick={() => onFavorite?.(recipe)}
-            className="text-2xl hover:scale-110 transition-transform"
-            aria-label="Add to favorites"
-          >
-            {recipe.favorite ? "❤️" : "♡"}
-          </button>
+      <div className="recipe-body">
+        <div className="recipe-title-row">
+          <h3>{recipe.name}</h3>
+          <span className="recipe-rating">★ 4.9</span>
         </div>
-
-        <h3 className="text-xl font-bold text-[#263238] mb-2">
-          {recipe.name}
-        </h3>
-
-        <p className="text-sm text-[#757575] mb-4">
-          {recipe.description}
-        </p>
-
-        <div className="flex items-center justify-between text-sm">
-          <span>⏱️ {recipe.time} min</span>
-          <span className="font-semibold text-[#4CAF50]">
-            {recipe.match}% match
-          </span>
+        <p className="recipe-description">{recipe.description}</p>
+        <div className="recipe-meta">
+          <span><span aria-hidden="true">◷</span> {recipe.time} min</span>
+          <span className="recipe-match">{recipe.match}% ingredient match</span>
         </div>
-
+        <div className="recipe-card-bottom">
+          <span className="recipe-callout">A good one to cook tonight</span>
+          <span className="recipe-arrow" aria-hidden="true">↗</span>
+        </div>
       </div>
     </article>
   )

@@ -1,9 +1,9 @@
 import { useState } from "react"
 
-import Navbar from "../components/Navbar/Navbar"
-import Footer from "../components/Footer/Footer"
-import RecipeCard from "../components/RecipeCard/RecipeCard"
-import SearchBar from "../components/SearchBar/SearchBar"
+import Navbar from "../components/Navbar.jsx"
+import Footer from "../components/Footer/Footer.jsx"
+import RecipeCard from "../components/RecipeCard/RecipeCard.jsx"
+import SearchBar from "../components/searchBar/searchBar.jsx"
 import mockRecipes from "../data/mockRecipes"
 
 function Explore() {
@@ -53,42 +53,30 @@ function Explore() {
   }
 
   return (
-    <div>
+    <div className="page-shell">
       <Navbar />
 
       <main className="py-16">
 
         <div className="container">
 
-          <div className="text-center mb-10">
-            <span className="text-[#4CAF50] font-semibold">
-              Discover
-            </span>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-[#263238] mt-2 mb-4">
-              Explore Recipes
-            </h1>
-
-            <p className="text-[#757575]">
-              Discover recipes from different cuisines and lifestyles.
-            </p>
+          <div className="reveal-item page-heading">
+            <span className="section-eyebrow">A TABLE FULL OF IDEAS</span>
+            <h1>Find your next <em>favorite.</em></h1>
+            <p>From quick bites to slow Sunday suppers, there’s something delicious waiting.</p>
           </div>
 
-          <div className="max-w-3xl mx-auto mb-8">
+          <div className="reveal-item max-w-3xl mx-auto mb-8">
             <SearchBar onSearch={handleSearch} />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <div className="reveal-item flex flex-wrap justify-center gap-3 mb-12">
 
             {filters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => filterRecipes(filter)}
-                className={px-5 py-3 rounded-full font-semibold transition ${
-                  activeFilter === filter
-                    ? "bg-[#4CAF50] text-white"
-                    : "bg-white border border-[#E0E0E0] text-[#263238]"
-                }}
+                className={`filter-pill ${activeFilter === filter ? "selected" : ""}`}
               >
                 {filter}
               </button>
