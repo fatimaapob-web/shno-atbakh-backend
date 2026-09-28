@@ -1,0 +1,48 @@
+const mockRecipes = [
+  {
+    id: 1,
+    name: "Tomato Basil Pasta",
+    cuisine: "Italian",
+    description: "A simple pasta with fresh tomatoes and basil.",
+    image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85",
+    time: 25,
+    match: 96,
+    ingredients: ["tomato", "basil", "pasta"],
+    favorite: false,
+  },
+  {
+    id: 2,
+    name: "Chicken Rice Bowl",
+    cuisine: "Mediterranean",
+    description: "Seasoned chicken served with rice and vegetables.",
+    image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85",
+    time: 35,
+    match: 91,
+    ingredients: ["chicken", "rice", "vegetables"],
+    favorite: false,
+  },
+  {
+    id: 3,
+    name: "Garden Salad",
+    cuisine: "Healthy",
+    description: "A crisp salad packed with seasonal vegetables.",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=85",
+    time: 15,
+    match: 88,
+    ingredients: ["lettuce", "tomato", "cucumber"],
+    favorite: false,
+  },
+  {
+    id: 4,
+    name: "Vegetable Omelette",
+    cuisine: "Breakfast",
+    description: "Fluffy eggs filled with colorful vegetables.",
+    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=85",
+    time: 20,
+    match: 84,
+    ingredients: ["eggs", "tomato", "onion"],
+    favorite: false,
+  },
+]
+
+export default mockRecipes
