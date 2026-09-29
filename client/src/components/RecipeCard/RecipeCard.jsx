@@ -1,37 +1,73 @@
-function RecipeCard({ recipe, onFavorite }) {
-  return (
-    <article className="recipe-card card-hover">
-      <div className="recipe-image image-zoom">
-        <img
-          src={recipe.image}
-          alt={recipe.name}
-          loading="lazy"
-        />
-        <span className="recipe-cuisine">{recipe.cuisine}</span>
-        <button
-          type="button"
-          onClick={() => onFavorite?.(recipe)}
-          className="recipe-favorite"
-          aria-label={recipe.favorite ? "Remove from favorites" : "Add to favorites"}
-          aria-pressed={Boolean(recipe.favorite)}
-        >
-          {recipe.favorite ? "♥" : "♡"}
-        </button>
-      </div>
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import useLang from "../../i18n/useLang"
 
+function RecipeCard({ recipe, onFavorite }) {
+  const { t, pick } = useLang()
+  const navigate = useNavigate()
+  const [broken, setBroken] = useState(false)
+  const name = pick(recipe.name)
+  // وصفات الـ AI ما عندها صفحة تفاصيل بعد
+  const canOpen = typeof recipe.id === "number"
+  const open = () => canOpen && navigate(`/recipe/${recipe.id}`)
+
+  return (
+    <article
+      className={`recipe-card card-hover ${canOpen ? "is-link" : ""}`}
+      onClick={open}
+    >
+      <div className="recipe-image image-zoom">
+        {recipe.image && !broken ? (
+          <img src={recipe.image} alt={name} loading="lazy" onError={() => setBroken(true)} />
+        ) : (
+          <div className="recipe-art" style={{ background: recipe.tint || "#eef4ec" }} role="img" aria-label={name}>
+            <span aria-hidden="true">{recipe.art || "🍽️"}</span>
+          </div>
+        )}
+        <span className="recipe-cuisine">{pick(recipe.cuisine)}</span>
+        {onFavorite && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onFavorite(recipe)
+            }}
+            className="recipe-favorite"
+            aria-label={recipe.favorite ? t("recipe.removeFav") : t("recipe.addFav")}
+            aria-pressed={Boolean(recipe.favorite)}
+          >
+            {recipe.favorite ? "♥" : "♡"}
+          </button>
+        )}
+      </div>
       <div className="recipe-body">
         <div className="recipe-title-row">
-          <h3>{recipe.name}</h3>
-          <span className="recipe-rating">★ 4.9</span>
+          <h3>
+            {canOpen ? (
+              <a
+                href={`/recipe/${recipe.id}`}
+                className="recipe-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  open()
+                }}
+              >
+                {name}
+              </a>
+            ) : (
+              name
+            )}
+          </h3>
         </div>
-        <p className="recipe-description">{recipe.description}</p>
+        <p className="recipe-description">{pick(recipe.description)}</p>
         <div className="recipe-meta">
-          <span><span aria-hidden="true">◷</span> {recipe.time} min</span>
-          <span className="recipe-match">{recipe.match}% ingredient match</span>
+          <span><span aria-hidden="true">◷</span> {recipe.time} {t("recipe.minutes")}</span>
+          <span className="recipe-match">{recipe.match}% {t("recipe.match")}</span>
         </div>
         <div className="recipe-card-bottom">
-          <span className="recipe-callout">A good one to cook tonight</span>
-          <span className="recipe-arrow" aria-hidden="true">↗</span>
+          <span className="recipe-callout">{canOpen ? t("detail.open") : t("recipe.callout")}</span>
+          <span className="recipe-arrow" aria-hidden="true">{t("recipe.arrow")}</span>
         </div>
       </div>
     </article>

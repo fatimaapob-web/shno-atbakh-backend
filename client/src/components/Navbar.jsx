@@ -1,23 +1,60 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
+import useLang from "../i18n/useLang"
+import useAuth from "../auth/useAuth"
+import ChefAvatar from "./ChefAvatar/ChefAvatar.jsx"
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const { t, lang, toggle } = useLang()
+  const { user, isLoggedIn, isAdmin } = useAuth()
 
   const links = [
-    { name: "Home", path: "/" },
-    { name: "Weekly Meals", path: "/weekly" },
-    { name: "Explore", path: "/explore" },
-    { name: "Favorites", path: "/favorites" },
-    { name: "Profile", path: "/profile" },
+    { key: "home", path: "/" },
+    { key: "weekly", path: "/weekly" },
+    { key: "explore", path: "/explore" },
+    { key: "favorites", path: "/favorites" },
   ]
+
+  const account = isLoggedIn ? (
+    <>
+      {isAdmin && (
+        <NavLink to="/admin" className={({ isActive }) => `nav-link ${isActive ? "active is-current" : ""}`} onClick={() => setMenuOpen(false)}>
+          {t("auth.admin")}
+        </NavLink>
+      )}
+      <NavLink to="/profile" className="nav-user" onClick={() => setMenuOpen(false)}>
+        <ChefAvatar name={user.name} size={30} admin={isAdmin} />
+        <span>{user.name.split(" ")[0]}</span>
+      </NavLink>
+    </>
+  ) : (
+    <NavLink to="/login" className="nav-login" onClick={() => setMenuOpen(false)}>
+      {t("auth.navLogin")}
+    </NavLink>
+  )
+
+  const langButton = (
+    <button
+      type="button"
+      className="lang-toggle"
+      onClick={toggle}
+      lang={lang === "ar" ? "en" : "ar"}
+    >
+      {t("nav.switchLang")}
+    </button>
+  )
 
   return (
     <nav className="site-nav sticky top-0 z-50">
       <div className="container nav-inner">
         <NavLink to="/" className="brand-mark">
           <span className="brand-icon" aria-hidden="true">✳</span>
-          <span>good<span className="brand-highlight">food</span><small>RECIPES FOR REAL LIFE</small></span>
+          <span>
+            {t("brand.first")}{" "}
+            <span className="brand-highlight">{t("brand.highlight")}</span>
+            <small>{t("brand.tagline")}</small>
+          </span>
         </NavLink>
 
         <div className="desktop-nav">
@@ -25,17 +62,13 @@ function Navbar() {
             <NavLink
               key={link.path}
               to={link.path}
-              className={({ isActive }) =>
-                `nav-link ${isActive ? "active" : ""} ${
-                  isActive
-                    ? "is-current"
-                    : ""
-                }`
-              }
+              className={({ isActive }) => `nav-link ${isActive ? "active is-current" : ""}`}
             >
-              {link.name}
+              {t(`nav.${link.key}`)}
             </NavLink>
           ))}
+          {account}
+          {langButton}
         </div>
 
         <button
@@ -43,7 +76,7 @@ function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           className="mobile-menu-button"
           aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={menuOpen ? t("nav.close") : t("nav.open")}
         >
           {menuOpen ? "×" : "☰"}
         </button>
@@ -59,9 +92,11 @@ function Navbar() {
                 onClick={() => setMenuOpen(false)}
                 className="mobile-nav-link"
               >
-                {link.name}
+                {t(`nav.${link.key}`)}
               </NavLink>
             ))}
+            {account}
+            {langButton}
           </div>
         </div>
       )}

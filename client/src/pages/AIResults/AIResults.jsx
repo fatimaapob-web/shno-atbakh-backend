@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar.jsx"
 import Footer from "../../components/Footer/Footer.jsx"
 import RecipeCard from "../../components/RecipeCard/RecipeCard.jsx"
 import { suggestRecipes } from "../../services/api"
+import useLang from "../../i18n/useLang"
 
 function AIResults() {
   const location = useLocation()
@@ -13,6 +14,7 @@ function AIResults() {
   const ingredients = location.state?.ingredients || []
 
   const [recipes, setRecipes] = useState([])
+  const { t, lang } = useLang()
   const ingredientsKey = ingredients.join("|")
   const [status, setStatus] = useState(
     ingredients.length ? "loading" : "ready"
@@ -23,7 +25,7 @@ function AIResults() {
 
     let cancelled = false
 
-    suggestRecipes(ingredientsKey.split("|"), { lang: "en" })
+    suggestRecipes(ingredientsKey.split("|"), { lang })
       .then((data) => {
         if (cancelled) return
         // نحول رد مرام لشكل بطاقة الوصفة
@@ -32,7 +34,7 @@ function AIResults() {
             id: `ai-${i}`,
             name: s.name,
             description: s.description,
-            cuisine: s.cuisine || "Maram's pick",
+            cuisine: s.cuisine || t("ai.pick"),
             image: "/recipe-placeholder.svg",
             time: s.time,
             match: s.matchPercentage,
@@ -44,7 +46,7 @@ function AIResults() {
       .catch(() => !cancelled && setStatus("error"))
 
     return () => { cancelled = true }
-  }, [ingredientsKey])
+  }, [ingredientsKey, lang, t])
 
   return (
     <div className="page-shell">
@@ -59,13 +61,13 @@ function AIResults() {
             onClick={() => navigate("/")}
             className="text-[#2E7D32] font-semibold mb-8"
           >
-            ← Back
+            {t("ai.back")}
           </button>
 
           <div className="reveal-item page-heading">
-            <span className="section-eyebrow">A LITTLE FRIDGE MAGIC</span>
-            <h1>Let’s cook <em>something lovely.</em></h1>
-            <p>Here are a few delicious ways to use what you already have.</p>
+            <span className="section-eyebrow">{t("ai.eyebrow")}</span>
+            <h1>{t("ai.title1")} <em>{t("ai.titleEm")}</em></h1>
+            <p>{t("ai.body")}</p>
 
             <div className="flex flex-wrap justify-center gap-2">
 
@@ -85,15 +87,15 @@ function AIResults() {
           {status === "loading" && (
             <div className="empty-state">
               <div className="text-6xl mb-5">🍳</div>
-              <h2 className="text-2xl font-bold mb-3">Maram is thinking…</h2>
-              <p className="text-[#757575]">Finding recipes for your ingredients.</p>
+              <h2 className="text-2xl font-bold mb-3">{t("ai.thinkingTitle")}</h2>
+              <p className="text-[#757575]">{t("ai.thinkingBody")}</p>
             </div>
           )}
 
           {status === "error" && (
             <div className="empty-state">
-              <h2 className="text-2xl font-bold mb-3">Maram couldn't reach the kitchen</h2>
-              <p className="text-[#757575]">Make sure the server is running on port 3000, then try again.</p>
+              <h2 className="text-2xl font-bold mb-3">{t("ai.errorTitle")}</h2>
+              <p className="text-[#757575]">{t("ai.errorBody")}</p>
             </div>
           )}
 
@@ -116,11 +118,11 @@ function AIResults() {
               </div>
 
               <h2 className="text-2xl font-bold mb-3">
-                No matching recipes yet
+                {t("ai.noneTitle")}
               </h2>
 
               <p className="text-[#757575]">
-                Try adding different ingredients.
+                {t("ai.noneBody")}
               </p>
 
             </div>

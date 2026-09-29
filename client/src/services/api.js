@@ -10,16 +10,26 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
     if (token) headers.Authorization = `Bearer ${token}`
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  })
+  let response
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    })
+  } catch {
+    // السيرفر مطفي أو الرابط غلط
+    const error = new Error("Server unreachable")
+    error.offline = true
+    throw error
+  }
 
   const data = await response.json().catch(() => ({}))
 
   if (!response.ok) {
-    throw new Error(data.message || `Request failed (${response.status})`)
+    const error = new Error(data.message || `Request failed (${response.status})`)
+    error.status = response.status
+    throw error
   }
 
   return data
@@ -28,6 +38,8 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
 // ---------- Maram AI ----------
 export const suggestRecipes = (ingredients, options = {}) =>
   request("/suggest", { method: "POST", body: { ingredients, ...options } })
+export const getAiRecipe = (recipe) =>
+  request("/suggest/recipe", { method: "POST", body: recipe })
 
 // ---------- Explore ----------
 export const getCategories = () => request("/categories")
@@ -40,6 +52,19 @@ export const searchRecipes = (q) =>
 export const register = (data) => request("/users/register", { method: "POST", body: data })
 export const login = (data) => request("/users/login", { method: "POST", body: data })
 export const getProfile = () => request("/users/profile", { auth: true })
+export const updateProfile = (data) =>
+  request("/users/profile", { method: "PUT", body: data, auth: true })
+
+// ---------- Admin ----------
+export const getAdminStats = () => request("/admin/stats", { auth: true })
+export const getAdminUsers = (search = "") =>
+  request(`/admin/users?search=${encodeURIComponent(search)}`, { auth: true })
+export const setUserRole = (id, role) =>
+  request(`/admin/users/${id}/role`, { method: "PATCH", body: { role }, auth: true })
+export const setUserStatus = (id, isActive) =>
+  request(`/admin/users/${id}/status`, { method: "PATCH", body: { isActive }, auth: true })
+export const deleteUser = (id) =>
+  request(`/admin/users/${id}`, { method: "DELETE", auth: true })
 
 // ---------- Favorites ----------
 export const getFavorites = () => request("/favorites", { auth: true })

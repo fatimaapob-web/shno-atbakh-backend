@@ -10,6 +10,18 @@ const {
   getUserById,
   updateUser,
 } = require("../models/userModel");
+const { isAdmin } = require("../config/roles");
+
+// شكل المستخدم اللي يرجع للواجهة
+const publicUser = (user) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  role_id: user.role_id,
+  is_admin: isAdmin(user),
+  is_active: user.is_active !== false,
+  created_at: user.created_at,
+});
 
 const googleClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID
@@ -95,6 +107,12 @@ const login = async (req, res) => {
       });
     }
 
+    if (user.is_active === false) {
+      return res.status(403).json({
+        message: "This account has been deactivated",
+      });
+    }
+
     // 4. إنشاء JWT
     const token = jwt.sign(
       {
@@ -111,12 +129,7 @@ const login = async (req, res) => {
     res.json({
       message: "Login successful",
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role_id: user.role_id,
-      },
+      user: publicUser(user),
     });
 
   } catch (error) {
@@ -159,6 +172,12 @@ const googleLogin = async (req, res) => {
       );
     }
 
+    if (user.is_active === false) {
+      return res.status(403).json({
+        message: "This account has been deactivated",
+      });
+    }
+
     const token = jwt.sign(
       {
         userId: user.id,
@@ -173,12 +192,7 @@ const googleLogin = async (req, res) => {
     res.json({
       message: "Google login successful",
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role_id: user.role_id,
-      },
+      user: publicUser(user),
     });
 
   } catch (error) {
@@ -200,7 +214,7 @@ const getProfile = async (req, res) => {
     }
 
     res.json({
-      user,
+      user: publicUser(user),
     });
 
   } catch (error) {
@@ -238,7 +252,7 @@ const updateProfile = async (req, res) => {
 
     res.json({
       message: "Profile updated successfully",
-      user,
+      user: publicUser(user),
     });
 
   } catch (error) {

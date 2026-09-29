@@ -1,127 +1,77 @@
 import { useState } from "react"
 
-import Hero from "../components/Hero/Hero.jsx"
+import MaramWelcome from "../components/MaramWelcome/MaramWelcome.jsx"
 import Navbar from "../components/Navbar.jsx"
 import Footer from "../components/Footer/Footer.jsx"
 import CategoryCard from "../components/Categorycard/categorycard.jsx"
 import RecipeCard from "../components/RecipeCard/RecipeCard.jsx"
-import AISection from "../components/AIsection/AIsection.jsx"
+import MaramFridge from "../components/MaramFridge/MaramFridge.jsx"
 import SearchBar from "../components/searchBar/searchBar.jsx"
+import useLang from "../i18n/useLang"
 
 import mockRecipes from "../data/mockRecipes"
 
 function Home() {
+  const { t, pick } = useLang()
   const [recipes, setRecipes] = useState(mockRecipes)
+  const [query, setQuery] = useState("")
 
   const handleFavorite = (recipe) => {
-    setRecipes((currentRecipes) =>
-      currentRecipes.map((item) =>
-        item.id === recipe.id
-          ? { ...item, favorite: !item.favorite }
-          : item
-      )
+    setRecipes((current) =>
+      current.map((item) => (item.id === recipe.id ? { ...item, favorite: !item.favorite } : item))
     )
   }
 
-  const handleSearch = (value) => {
-    if (!value.trim()) {
-      setRecipes(mockRecipes)
-      return
-    }
-
-    const filtered = mockRecipes.filter((recipe) =>
-      recipe.name.toLowerCase().includes(value.toLowerCase())
-    )
-
-    setRecipes(filtered)
-  }
+  const shown = query.trim()
+    ? recipes.filter((r) => pick(r.name).toLowerCase().includes(query.toLowerCase()))
+    : recipes
 
   return (
     <div className="page-shell">
       <Navbar />
 
-      <Hero />
+      <MaramWelcome />
+
+      <MaramFridge />
 
       <section className="reveal-section py-20 bg-white">
         <div className="container">
-
           <div className="section-heading text-center mb-12">
-            <span className="section-eyebrow">
-              SOMETHING FOR EVERY CRAVING
-            </span>
-
+            <span className="section-eyebrow">{t("home.moodEyebrow")}</span>
             <h2>
-              What sounds <em>good</em> today?
+              {t("home.moodTitle1")} <em>{t("home.moodTitleEm")}</em> {t("home.moodTitle2")}
             </h2>
-            <p>Pick a mood. We’ll bring the meal ideas.</p>
+            <p>{t("home.moodBody")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            <CategoryCard
-              icon="🥗"
-              title="Feel-good"
-              description="Colorful, fresh and full of goodness."
-            />
-
-            <CategoryCard
-              icon="🍝"
-              title="Quick & cozy"
-              description="Big comfort, without the long wait."
-            />
-
-            <CategoryCard
-              icon="🌍"
-              title="Middle Eastern"
-              description="Warm spices, generous tables, happy hearts."
-            />
-
-            <CategoryCard
-              icon="🍕"
-              title="Little classics"
-              description="The familiar favorites you always crave."
-            />
-
+            {t("home.moods").map((mood) => (
+              <CategoryCard key={mood.title} icon={mood.icon} title={mood.title} description={mood.description} to={`/explore?filter=${mood.filter}`} />
+            ))}
           </div>
-
         </div>
       </section>
 
       <section id="popular-recipes" className="reveal-section py-20 bg-[#FFFDF7]">
         <div className="container">
-
           <div className="section-heading max-w-3xl mx-auto mb-12">
-            <span className="section-eyebrow">A GOOD PLACE TO START</span>
+            <span className="section-eyebrow">{t("home.popularEyebrow")}</span>
             <h2>
-              What are we <em>making?</em>
+              {t("home.popularTitle1")} <em>{t("home.popularTitleEm")}</em>
             </h2>
-            <p>Find a new favorite for tonight’s table.</p>
-
-            <SearchBar onSearch={handleSearch} />
+            <p>{t("home.popularBody")}</p>
+            <SearchBar onSearch={setQuery} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-            {recipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onFavorite={handleFavorite}
-              />
+            {shown.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} onFavorite={handleFavorite} />
             ))}
-
           </div>
 
-          {recipes.length === 0 && (
-            <p className="text-center text-[#757575] mt-10">
-              No recipes found.
-            </p>
-          )}
-
+          {shown.length === 0 && <p className="text-center text-[#757575] mt-10">{t("home.noResults")}</p>}
         </div>
       </section>
-
-      <AISection />
 
       <Footer />
     </div>

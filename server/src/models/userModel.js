@@ -15,9 +15,7 @@ const createUser = async (name, email, password, roleId = 1) => {
 
 const findUserByEmail = async (email) => {
   const result = await pool.query(
-    `SELECT id, name, email, password, google_id, role_id, created_at
-     FROM users
-     WHERE email = $1`,
+    `SELECT * FROM users WHERE email = $1`,
     [email]
   );
 
@@ -27,9 +25,7 @@ const findUserByEmail = async (email) => {
 
 const findUserByGoogleId = async (googleId) => {
   const result = await pool.query(
-    `SELECT id, name, email, password, google_id, role_id, created_at
-     FROM users
-     WHERE google_id = $1`,
+    `SELECT * FROM users WHERE google_id = $1`,
     [googleId]
   );
 
@@ -50,13 +46,14 @@ const createGoogleUser = async (name, email, googleId, roleId = 1) => {
 
 const getUserById = async (id) => {
   const result = await pool.query(
-    `SELECT id, name, email, google_id, role_id, created_at
-     FROM users
-     WHERE id = $1`,
+    `SELECT * FROM users WHERE id = $1`,
     [id]
   );
 
-  return result.rows[0];
+  // ما نرجع كلمة السر أبداً
+  const user = result.rows[0];
+  if (user) delete user.password;
+  return user;
 };
 
 const updateUser = async (id, name, email) => {
