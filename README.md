@@ -1,16 +1,69 @@
-# React + Vite
+# 🍳 شنو أطبخ؟ — Shno Atbakh?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+مشروع تخرج Full-Stack: تطبيق يقترح وصفات حسب المكونات اللي عندك، مع مساعدة ذكية اسمها **مرام**.
 
-Currently, two official plugins are available:
+## ترتيب المشروع
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+shno-atbakh/
+├── client/   الواجهة (React + Vite + Tailwind)
+└── server/   الباكند (Node.js + Express + PostgreSQL + Gemini)
+```
 
-## React Compiler
+## التشغيل
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. السيرفر (المنفذ 3000)
+```bash
+cd server
+npm install
+cp .env.example .env   # ثم عبّي القيم
+npm run dev
+```
 
-## Expanding the ESLint configuration
+### 2. الواجهة (المنفذ 5173)
+```bash
+cd client
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## الفريق
+
+| العضوة | الدور |
+|---|---|
+| سارة | Team leader — ميزة «شنو أطبخ؟» ومساعدة الـ AI «مرام» (frontend + backend) |
+| فاطمة | Backend — المستخدمين، المفضلة، الاستكشاف، وجبات الأسبوع، قاعدة البيانات |
+| زهراء | Frontend — الصفحات والهوية البصرية |
+
+## ميزة مرام (AI)
+
+```http
+POST /api/suggest
+```
+
+```json
+{ "ingredients": ["دجاج", "رز"], "people": 2, "mealType": "غداء", "lang": "ar" }
+```
+
+`people` و`mealType` و`lang` اختيارية. `lang` تكون `ar` أو `en`.
+
+تفاصيل روابط الباكند الباقية موجودة في [`server/README.md`](server/README.md).
+
+> رسومات شخصية مرام مولّدة بمساعدة الذكاء الاصطناعي.
+
+## الحسابات والصلاحيات
+
+- كل شخص يسجّل بالموقع يصير **مستخدم**.
+- **المدير** (الدور `admin` بجدول `roles`) يفتح **لوحة التحكم** (`/admin`): يشوف الإحصائيات، ويبحث بالمستخدمين، ويغيّر صلاحياتهم، ويوقف أو يفعّل أو يحذف حساباتهم.
+- السيرفر يقرأ رقم دور المدير من جدول `roles` حسب الاسم تلقائياً عند التشغيل.
+- لإعداد أول مدير، شغّلي الملف `server/sql/admin-setup.sql` على قاعدة البيانات، بعد ما تكتبين إيميلك بداخله.
+
+| الرابط | الوظيفة |
+|---|---|
+| `GET /api/admin/stats` | أرقام لوحة التحكم |
+| `GET /api/admin/users?search=` | قائمة المستخدمين |
+| `PATCH /api/admin/users/:id/role` | `{ "role": "user" \| "admin" }` |
+| `PATCH /api/admin/users/:id/status` | `{ "isActive": true \| false }` |
+| `DELETE /api/admin/users/:id` | حذف مستخدم |
+
+كل روابط `/api/admin` تحتاج تسجيل دخول بحساب مدير.
