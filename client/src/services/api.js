@@ -29,6 +29,8 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
   if (!response.ok) {
     const error = new Error(data.message || `Request failed (${response.status})`)
     error.status = response.status
+    error.code = data.code
+    error.data = data
     throw error
   }
 
@@ -36,8 +38,9 @@ async function request(path, { method = "GET", body, auth = false } = {}) {
 }
 
 // ---------- Maram AI ----------
+// نرسل التوكن إذا موجود، حتى السيرفر يعرف حد الاستخدام (زائر / مجاني / بريميوم)
 export const suggestRecipes = (ingredients, options = {}) =>
-  request("/suggest", { method: "POST", body: { ingredients, ...options } })
+  request("/suggest", { method: "POST", body: { ingredients, ...options }, auth: true })
 export const getAiRecipe = (recipe) =>
   request("/suggest/recipe", { method: "POST", body: recipe })
 
@@ -79,3 +82,10 @@ export const addWeeklyMeal = (data) =>
   request("/weekly-meals", { method: "POST", body: data, auth: true })
 export const deleteWeeklyMeal = (id) =>
   request(`/weekly-meals/${id}`, { method: "DELETE", auth: true })
+
+// ---------- Premium (الدفع تجريبي) ----------
+export const getPremiumPlans = () => request("/premium/plans")
+export const getPremiumStatus = () => request("/premium/status", { auth: true })
+export const subscribePremium = (plan, method) =>
+  request("/premium/subscribe", { method: "POST", body: { plan, method }, auth: true })
+export const cancelPremium = () => request("/premium/cancel", { method: "POST", auth: true })

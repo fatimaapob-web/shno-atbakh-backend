@@ -8,8 +8,16 @@ import useAuth from "../../auth/useAuth"
 import * as api from "../../services/api"
 import "./Admin.css"
 
-const STAT_KEYS = ["users", "admins", "newThisWeek", "inactive", "recipes", "favorites"]
-const STAT_ICONS = { users: "👥", admins: "🛡️", newThisWeek: "✨", inactive: "⏸️", recipes: "📖", favorites: "♥" }
+const STAT_KEYS = [
+  "users", "admins", "newThisWeek", "inactive", "recipes", "favorites",
+  "premiumUsers", "revenue", "aiToday",
+]
+const STAT_ICONS = { users: "👥", admins: "🛡️", newThisWeek: "✨", inactive: "⏸️", recipes: "📖", favorites: "♥",
+  premiumUsers: "✦", revenue: "💰", aiToday: "🤖",
+}
+
+// أرقام الربح (بريميوم) تطلع بصف مميز
+const MONEY_KEYS = ["premiumUsers", "revenue", "aiToday"]
 
 function Gate({ children }) {
   return (
@@ -118,9 +126,9 @@ function Admin() {
 
           <section className="ad-stats" aria-label={t("admin.title")}>
             {STAT_KEYS.map((key) => (
-              <div className="ad-stat" key={key}>
+              <div className={`ad-stat ${MONEY_KEYS.includes(key) ? "money" : ""}`} key={key}>
                 <span className="ad-stat-icon" aria-hidden="true">{STAT_ICONS[key]}</span>
-                <b>{stats ? stats[key] : "—"}</b>
+                <b>{stats ? Number(stats[key] ?? 0).toLocaleString("en-US") : "—"}</b>
                 <span>{t(`admin.stats.${key}`)}</span>
               </div>
             ))}

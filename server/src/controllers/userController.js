@@ -11,6 +11,7 @@ const {
   updateUser,
 } = require("../models/userModel");
 const { isAdmin } = require("../config/roles");
+const { isPremium } = require("../config/premium");
 
 // شكل المستخدم اللي يرجع للواجهة
 const publicUser = (user) => ({
@@ -20,6 +21,9 @@ const publicUser = (user) => ({
   role_id: user.role_id,
   is_admin: isAdmin(user),
   is_active: user.is_active !== false,
+  is_premium: isPremium(user),
+  premium_plan: isPremium(user) ? user.premium_plan : null,
+  premium_until: isPremium(user) ? user.premium_until : null,
   created_at: user.created_at,
 });
 

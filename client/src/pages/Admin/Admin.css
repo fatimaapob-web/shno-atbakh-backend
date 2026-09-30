@@ -10,6 +10,10 @@
 .ad-stat-icon { font-size: 22px; }
 .ad-stat b { font-size: 28px; color: #31452e; }
 .ad-stat span:last-child { font-size: 13px; color: #857c6d; }
+/* صف أرقام الربح */
+.ad-stat.money { grid-column: span 2; background: #31452e; border-color: #31452e; }
+.ad-stat.money b { color: #e7b65e; }
+.ad-stat.money span:last-child { color: rgba(255, 249, 235, .75); }
 
 .ad-panel { background: #fffdf8; border: 1px solid #e9e1d3; border-radius: 22px; padding: 20px; }
 .ad-toolbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; }
@@ -54,5 +58,5 @@
 .ad-gate p { margin: 0 0 12px; color: #857c6d; }
 .ad-btn { display: inline-flex; border-radius: 14px; padding: 12px 20px; background: #31452e; color: #fff9eb; font-weight: 700; text-decoration: none; }
 
-@media (max-width: 1100px) { .ad-stats { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1100px) { .ad-stats { grid-template-columns: repeat(3, 1fr); } .ad-stat.money { grid-column: span 1; } }
 @media (max-width: 560px) { .ad-stats { grid-template-columns: repeat(2, 1fr); } }

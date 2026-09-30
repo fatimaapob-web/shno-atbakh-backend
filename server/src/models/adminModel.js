@@ -16,7 +16,15 @@ const getStats = async (adminRoleId) => {
     countRows("SELECT COUNT(*) FROM favorites"),
   ]);
 
-  return { users, admins, newThisWeek, inactive, recipes, favorites };
+  // أرقام الاشتراك (تشتغل حتى لو الجداول بعدها ما انخلقت)
+  const safe = (promise) => promise.catch(() => 0);
+  const [premiumUsers, revenue, aiToday] = await Promise.all([
+    safe(countRows("SELECT COUNT(*) FROM users WHERE premium_until > NOW()")),
+    safe(pool.query("SELECT COALESCE(SUM(amount), 0) AS total FROM subscriptions").then((r) => Number(r.rows[0].total))),
+    safe(pool.query("SELECT COALESCE(SUM(count), 0) AS total FROM ai_usage WHERE day = CURRENT_DATE").then((r) => Number(r.rows[0].total))),
+  ]);
+
+  return { users, admins, newThisWeek, inactive, recipes, favorites, premiumUsers, revenue, aiToday };
 };
 
 // قائمة المستخدمين مع بحث بالاسم أو الإيميل

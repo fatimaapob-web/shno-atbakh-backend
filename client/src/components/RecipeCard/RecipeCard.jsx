@@ -1,9 +1,13 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import useLang from "../../i18n/useLang"
+import useAuth from "../../auth/useAuth"
 
 function RecipeCard({ recipe, onFavorite }) {
   const { t, pick } = useLang()
+  const { isPremium } = useAuth()
+  // وصفة حصرية والمستخدم مو مشترك
+  const locked = recipe.premium && !isPremium
   const navigate = useNavigate()
   const [broken, setBroken] = useState(false)
   const name = pick(recipe.name)
@@ -25,6 +29,11 @@ function RecipeCard({ recipe, onFavorite }) {
           </div>
         )}
         <span className="recipe-cuisine">{pick(recipe.cuisine)}</span>
+        {recipe.premium && (
+          <span className={`recipe-premium ${locked ? "locked" : ""}`}>
+            <span aria-hidden="true">{locked ? "🔒" : "✦"}</span> {t("premium.badge")}
+          </span>
+        )}
         {onFavorite && (
           <button
             type="button"
