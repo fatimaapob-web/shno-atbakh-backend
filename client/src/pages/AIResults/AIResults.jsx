@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 import Navbar from "../../components/Navbar.jsx"
 import Footer from "../../components/Footer/Footer.jsx"
@@ -43,7 +43,7 @@ function AIResults() {
         )
         setStatus("ready")
       })
-      .catch(() => !cancelled && setStatus("error"))
+      .catch((error) => !cancelled && setStatus(error.code === "DAILY_LIMIT" ? "limit" : "error"))
 
     return () => { cancelled = true }
   }, [ingredientsKey, lang, t])
@@ -89,6 +89,14 @@ function AIResults() {
               <div className="text-6xl mb-5">🍳</div>
               <h2 className="text-2xl font-bold mb-3">{t("ai.thinkingTitle")}</h2>
               <p className="text-[#757575]">{t("ai.thinkingBody")}</p>
+            </div>
+          )}
+
+          {status === "limit" && (
+            <div className="empty-state">
+              <img className="empty-maram" src="/maram/full-confused.webp" alt="" />
+              <h2 className="text-2xl font-bold mb-3">{t("premium.limitReached")}</h2>
+              <Link to="/premium" className="button button-sun">✦ {t("premium.upgrade")}</Link>
             </div>
           )}
 

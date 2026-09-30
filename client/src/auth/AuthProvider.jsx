@@ -64,6 +64,7 @@ function AuthProvider({ children }) {
       token,
       isLoggedIn: Boolean(token && user),
       isAdmin: Boolean(user?.is_admin),
+      isPremium: Boolean(user?.is_premium),
       login: async (email, password) => {
         const data = await api.login({ email, password })
         save(data.token, data.user)
@@ -76,6 +77,12 @@ function AuthProvider({ children }) {
         return data.user
       },
       updateUser: (next) => save(token, next),
+      // يجيب بيانات المستخدم من جديد (مثلاً بعد الاشتراك أو الإلغاء)
+      refreshUser: async () => {
+        const data = await api.getProfile()
+        save(token, data.user)
+        return data.user
+      },
       logout,
     }),
     [user, token, logout]

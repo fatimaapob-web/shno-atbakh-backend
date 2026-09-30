@@ -53,3 +53,13 @@
 .pf-guest .pf-btn { background: #31452e; color: #fff9eb; }
 
 @media (max-width: 900px) { .pf-grid { grid-template-columns: 1fr; } }
+
+/* الاشتراك */
+.pf-role.premium { margin-inline-start: 6px; background: #31452e; border: 1px solid #e7b65e; color: #e7b65e; }
+.pf-sub p { margin: 0 0 14px; color: #52645d; line-height: 1.7; }
+.pf-sub.on { background: #31452e; border-color: #e7b65e; }
+.pf-sub.on h2 { color: #e7b65e; }
+.pf-sub.on p { color: rgba(255, 249, 235, .85); }
+.pf-panel .pf-btn.gold { background: #e7b65e; color: #352b1e; }
+.pf-panel .pf-btn.ghost-dark { background: transparent; color: #fff9eb; border: 1px solid rgba(255, 249, 235, .4); }
+.pf-panel .pf-btn:disabled { opacity: .6; cursor: wait; }

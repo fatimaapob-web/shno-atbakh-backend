@@ -6,7 +6,7 @@ import ChefAvatar from "../../components/ChefAvatar/ChefAvatar.jsx"
 import useLang from "../../i18n/useLang"
 import useAuth from "../../auth/useAuth"
 import authErrorKey from "../../auth/errorMessage"
-import { getFavorites, updateProfile } from "../../services/api"
+import { cancelPremium, getFavorites, updateProfile } from "../../services/api"
 import "./Profile.css"
 
 const PREFS_KEY = "shno-prefs"
@@ -29,12 +29,26 @@ const plannedDays = () => {
 
 function Profile() {
   const { t, lang } = useLang()
-  const { user, isLoggedIn, isAdmin, logout, updateUser } = useAuth()
+  const { user, isLoggedIn, isAdmin, isPremium, logout, updateUser, refreshUser } = useAuth()
   const navigate = useNavigate()
   const [favorites, setFavorites] = useState(null)
   const [form, setForm] = useState({ name: user?.name || "", email: user?.email || "" })
   const [message, setMessage] = useState(null)
   const [prefs, setPrefs] = useState(loadPrefs)
+  const [cancelling, setCancelling] = useState(false)
+
+  const cancelSubscription = async () => {
+    if (!window.confirm(t("premium.cancelConfirm"))) return
+    setCancelling(true)
+    try {
+      await cancelPremium()
+      await refreshUser()
+    } catch {
+      window.alert(t("premium.error"))
+    } finally {
+      setCancelling(false)
+    }
+  }
 
   useEffect(() => {
     if (!isLoggedIn) return
@@ -105,6 +119,7 @@ function Profile() {
             <span className={`pf-role ${isAdmin ? "admin" : ""}`}>
               {isAdmin ? t("profile.roleAdmin") : t("profile.roleUser")}
             </span>
+            {isPremium && <span className="pf-role premium">✦ {t("premium.badge")}</span>}
             {since && <p className="pf-since">{t("profile.memberSince", { d: since })}</p>}
 
             <div className="pf-stats">
@@ -130,6 +145,28 @@ function Profile() {
           </section>
 
           <div className="pf-side">
+            <section className={`pf-panel pf-sub ${isPremium ? "on" : ""}`}>
+              <h2>{t("premium.profileTitle")}</h2>
+              {isPremium ? (
+                <>
+                  <p>
+                    {t("premium.profilePremium", {
+                      plan: t(`premium.${user.premium_plan}`),
+                      d: new Intl.DateTimeFormat(lang === "ar" ? "ar-IQ" : "en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date(user.premium_until)),
+                    })}
+                  </p>
+                  <button type="button" className="pf-btn ghost-dark" onClick={cancelSubscription} disabled={cancelling}>
+                    {t("premium.cancel")}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{t("premium.profileFree")}</p>
+                  <Link to="/premium" className="pf-btn gold">✦ {t("premium.upgrade")}</Link>
+                </>
+              )}
+            </section>
+
             <section className="pf-panel">
               <h2>{t("profile.editTitle")}</h2>
               <form onSubmit={save} className="pf-form">

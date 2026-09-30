@@ -7,7 +7,9 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const weeklyMealRoutes = require("./routes/weeklyMealRoutes");
 const suggestRoutes = require("./routes/suggestRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const premiumRoutes = require("./routes/premiumRoutes");
 const { loadRoleIds } = require("./config/roles");
+const { ensurePremiumTables } = require("./config/premium");
 const cors = require("cors");
 const app = express();
 
@@ -24,6 +26,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/weekly-meals", weeklyMealRoutes);
 app.use("/api/suggest", suggestRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/premium", premiumRoutes);
 
 
 app.get("/", (req, res) => {
@@ -52,4 +55,5 @@ app.get("/db-test", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
   loadRoleIds();
+  ensurePremiumTables();
 });

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import Navbar from "../../components/Navbar.jsx"
 import Footer from "../../components/Footer/Footer.jsx"
 import useLang from "../../i18n/useLang"
+import useAuth from "../../auth/useAuth"
 import mockRecipes from "../../data/mockRecipes"
 import recipeDetails from "../../data/recipeDetails"
 import "./RecipeDetail.css"
@@ -10,6 +11,7 @@ import "./RecipeDetail.css"
 function RecipeDetail() {
   const { id } = useParams()
   const { t, pick, lang } = useLang()
+  const { isPremium } = useAuth()
   const [checked, setChecked] = useState({})
   const [done, setDone] = useState({})
   const [broken, setBroken] = useState(false)
@@ -33,6 +35,8 @@ function RecipeDetail() {
     )
   }
 
+  // الوصفات الحصرية تنقفل لغير المشتركين
+  const locked = recipe.premium && !isPremium
   const ingredients = details.ingredients[lang]
   const steps = details.steps[lang]
   const stepsDone = steps.filter((_, i) => done[i]).length
@@ -53,7 +57,10 @@ function RecipeDetail() {
               )}
             </div>
             <div className="rd-intro">
-              <span className="section-eyebrow">{pick(recipe.cuisine)}</span>
+              <span className="section-eyebrow">
+                {pick(recipe.cuisine)}
+                {recipe.premium && <span className="rd-premium"> ✦ {t("premium.badge")}</span>}
+              </span>
               <h1>{pick(recipe.name)}</h1>
               <p>{pick(recipe.description)}</p>
               <dl className="rd-facts">
@@ -64,6 +71,19 @@ function RecipeDetail() {
             </div>
           </header>
 
+          {locked ? (
+            <section className="rd-locked" aria-labelledby="rd-locked-title">
+              <ul className="rd-locked-peek" aria-hidden="true">
+                {ingredients.slice(0, 5).map((item) => <li key={item}>{item}</li>)}
+              </ul>
+              <div className="rd-locked-card">
+                <img src="/maram/avatar-excited.webp" alt="" />
+                <h2 id="rd-locked-title">{t("premium.lockedTitle")}</h2>
+                <p>{t("premium.lockedBody")}</p>
+                <Link to="/premium" className="rd-unlock">🔒 {t("premium.unlock")}</Link>
+              </div>
+            </section>
+          ) : (
           <div className="rd-body">
             <section className="rd-ingredients" aria-labelledby="rd-ing-title">
               <h2 id="rd-ing-title">{t("detail.ingredients")}</h2>
@@ -111,6 +131,7 @@ function RecipeDetail() {
               )}
             </section>
           </div>
+          )}
         </div>
       </main>
       <Footer />

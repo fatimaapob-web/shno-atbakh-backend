@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import useLang from "../../i18n/useLang"
+import useAuth from "../../auth/useAuth"
 import { suggestRecipes } from "../../services/api"
 import "./MaramFridge.css"
 
@@ -38,6 +39,7 @@ const reducedMotion = () =>
 
 function MaramFridge() {
   const { t, lang } = useLang()
+  const { isPremium } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [last] = useState(readLast)
@@ -51,6 +53,8 @@ function MaramFridge() {
   const [results, setResults] = useState(last?.results || [])
   const [asked, setAsked] = useState(last?.asked || [])
   const [bump, setBump] = useState(0)
+  const [usage, setUsage] = useState(null) // كم اقتراح باقي اليوم
+  const [limitHit, setLimitHit] = useState(false)
   const potRef = useRef(null)
   const resultsRef = useRef(null)
 
@@ -127,6 +131,8 @@ function MaramFridge() {
       })
       const list = data.suggestions || []
       setResults(list)
+      setUsage(data.usage || null)
+      setLimitHit(false)
       setStatus("ready")
       try {
         sessionStorage.setItem(LAST_KEY, JSON.stringify({ asked: ingredients, results: list }))
@@ -137,6 +143,12 @@ function MaramFridge() {
       setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth" }), 50)
     } catch (error) {
       setStatus("error")
+      // خلص الحد اليومي: نعرض الترقية لبريميوم
+      if (error.code === "DAILY_LIMIT") {
+        setLimitHit(true)
+        setUsage(error.data?.usage || null)
+        return say(error.data?.usage?.guest ? t("premium.limitGuest") : t("premium.limitReached"), "confused")
+      }
       say(
         error.offline ? t("fridge.errorOffline") : error.status === 503 ? t("fridge.busy") : t("fridge.error"),
         "confused"
@@ -304,9 +316,16 @@ function MaramFridge() {
               </div>
             </div>
 
-            <button type="button" className="mf-go" disabled={!count || status === "loading"} onClick={ask}>
+            <button type="button" className="mf-go" disabled={!count || status === "loading" || limitHit} onClick={ask}>
               {t("fridge.go")}
             </button>
+            {limitHit ? (
+              <Link to="/premium" className="mf-upgrade">✦ {t("premium.upgrade")}</Link>
+            ) : (
+              usage && !isPremium && (
+                <p className="mf-left">{t("premium.remaining", { n: usage.remaining, limit: usage.limit })}</p>
+              )
+            )}
           </div>
         </div>
       </div>

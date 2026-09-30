@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate, useLocation, useNavigate } from "react-router-dom"
 import Navbar from "../../components/Navbar.jsx"
 import Footer from "../../components/Footer/Footer.jsx"
 import useLang from "../../i18n/useLang"
@@ -11,12 +11,15 @@ function Login() {
   const { t } = useLang()
   const { login, register, isLoggedIn } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  // إذا جاي من صفحة ثانية (مثل بريميوم) نرجعه لها بعد الدخول
+  const next = location.state?.from || "/profile"
   const [mode, setMode] = useState("login")
   const [form, setForm] = useState({ name: "", email: "", password: "" })
   const [error, setError] = useState(null)
   const [busy, setBusy] = useState(false)
 
-  if (isLoggedIn) return <Navigate to="/profile" replace />
+  if (isLoggedIn) return <Navigate to={next} replace />
 
   const isRegister = mode === "register"
   const update = (key) => (e) => setForm({ ...form, [key]: e.target.value })
@@ -34,7 +37,7 @@ function Login() {
     try {
       if (isRegister) await register(form.name.trim(), form.email.trim(), form.password)
       else await login(form.email.trim(), form.password)
-      navigate("/profile")
+      navigate(next)
     } catch (err) {
       setError(t(authErrorKey(err)))
     } finally {

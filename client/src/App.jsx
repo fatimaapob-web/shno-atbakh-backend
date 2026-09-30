@@ -11,6 +11,7 @@ import Admin from "./pages/Admin/Admin"
 import AIRecipe from "./pages/AIRecipe/AIRecipe"
 import AIResults from "./pages/AIResults/AIResults"
 import RecipeDetail from "./pages/RecipeDetail/RecipeDetail"
+import Premium from "./pages/Premium/Premium"
 import usePageAnimations from "./animations/usePageAnimations"
 
 function App() {
@@ -47,6 +48,7 @@ function AnimatedRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/ai-recipe" element={<AIRecipe />} />
+        <Route path="/premium" element={<Premium />} />
       </Routes>
     </>
   )

@@ -7,7 +7,7 @@ import ChefAvatar from "./ChefAvatar/ChefAvatar.jsx"
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { t, lang, toggle } = useLang()
-  const { user, isLoggedIn, isAdmin } = useAuth()
+  const { user, isLoggedIn, isAdmin, isPremium } = useAuth()
 
   const links = [
     { key: "home", path: "/" },
@@ -15,6 +15,13 @@ function Navbar() {
     { key: "explore", path: "/explore" },
     { key: "favorites", path: "/favorites" },
   ]
+
+  // رابط بريميوم يطلع لغير المشتركين بس
+  const premiumLink = !isPremium && (
+    <NavLink to="/premium" className="nav-premium" onClick={() => setMenuOpen(false)}>
+      <span aria-hidden="true">✦</span> {t("premium.nav")}
+    </NavLink>
+  )
 
   const account = isLoggedIn ? (
     <>
@@ -26,6 +33,7 @@ function Navbar() {
       <NavLink to="/profile" className="nav-user" onClick={() => setMenuOpen(false)}>
         <ChefAvatar name={user.name} size={30} admin={isAdmin} />
         <span>{user.name.split(" ")[0]}</span>
+        {isPremium && <span className="nav-crown" title={t("premium.badge")} aria-label={t("premium.badge")}>✦</span>}
       </NavLink>
     </>
   ) : (
@@ -67,6 +75,7 @@ function Navbar() {
               {t(`nav.${link.key}`)}
             </NavLink>
           ))}
+          {premiumLink}
           {account}
           {langButton}
         </div>
@@ -95,6 +104,7 @@ function Navbar() {
                 {t(`nav.${link.key}`)}
               </NavLink>
             ))}
+            {premiumLink}
             {account}
             {langButton}
           </div>

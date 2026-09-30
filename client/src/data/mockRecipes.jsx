@@ -55,7 +55,7 @@ const mockRecipes = [
     description: { ar: "خضار محشية بالرز واللحم ومطبوخة بصلصة الطماطم.", en: "Vegetables stuffed with rice and meat, cooked in tomato sauce." },
   },
   {
-    id: 6, image: "/recipes/biryani.webp", art: "🍛", tint: "#f6e2a8", region: "Eastern", time: 60, match: 82, healthScore: 65, favorite: false,
+    id: 6, premium: true, image: "/recipes/biryani.webp", art: "🍛", tint: "#f6e2a8", region: "Eastern", time: 60, match: 82, healthScore: 65, favorite: false,
     name: { ar: "برياني عراقي", en: "Iraqi Biryani" },
     cuisine: { ar: "عراقي", en: "Iraqi" },
     description: { ar: "رز متبّل بالبهارات مع الدجاج والمكسرات والبازلاء.", en: "Spiced rice with chicken, nuts and peas." },
@@ -73,7 +73,7 @@ const mockRecipes = [
     description: { ar: "بيض مطهو في صلصة الطماطم والفلفل.", en: "Eggs poached in a tomato and pepper sauce." },
   },
   {
-    id: 9, image: "/recipes/eggplant-tepsi.webp", art: "🍆", tint: "#e7dff0", region: "Eastern", time: 75, match: 74, healthScore: 72, favorite: false,
+    id: 9, premium: true, image: "/recipes/eggplant-tepsi.webp", art: "🍆", tint: "#e7dff0", region: "Eastern", time: 75, match: 74, healthScore: 72, favorite: false,
     name: { ar: "تبسي باذنجان", en: "Eggplant Tepsi" },
     cuisine: { ar: "عراقي", en: "Iraqi" },
     description: { ar: "باذنجان مقلي مع كرات اللحم والطماطم في الفرن.", en: "Fried eggplant with meatballs and tomato, baked in the oven." },
@@ -97,7 +97,7 @@ const mockRecipes = [
     description: { ar: "فطائر ناعمة تُقدَّم مع العسل أو الفواكه.", en: "Soft pancakes served with honey or fruit." },
   },
   {
-    id: 13, image: "/recipes/kubba-halab.webp", art: "🧆", tint: "#f3e1c8", region: "Eastern", time: 80, match: 72, healthScore: 60, favorite: false,
+    id: 13, premium: true, image: "/recipes/kubba-halab.webp", art: "🧆", tint: "#f3e1c8", region: "Eastern", time: 80, match: 72, healthScore: 60, favorite: false,
     name: { ar: "كبة حلب", en: "Kubba Halab" },
     cuisine: { ar: "عراقي", en: "Iraqi" },
     description: { ar: "أقراص رز محشوة باللحم المفروم والبصل والبهارات.", en: "Rice shells stuffed with spiced minced meat and onion." },
@@ -151,7 +151,7 @@ const mockRecipes = [
     description: { ar: "برغر لحم مشوي مع الخضروات والجبن في خبز طري.", en: "Grilled beef patty with vegetables and cheese in a soft bun." },
   },
   {
-    id: 22, image: "/recipes/masgouf.webp", art: "🐟", tint: "#dbe7ec", region: "Eastern", time: 60, match: 70, healthScore: 85, favorite: false,
+    id: 22, premium: true, image: "/recipes/masgouf.webp", art: "🐟", tint: "#dbe7ec", region: "Eastern", time: 60, match: 70, healthScore: 85, favorite: false,
     name: { ar: "سمك مسكوف", en: "Masgouf" },
     cuisine: { ar: "عراقي", en: "Iraqi" },
     description: { ar: "سمك مشوي على الطريقة العراقية مع الطماطم والبصل.", en: "Iraqi-style grilled fish with tomato and onion." },
